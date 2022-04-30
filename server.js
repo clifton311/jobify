@@ -1,19 +1,45 @@
+import express from "express";
 
-import express from 'express'
+const app = express();
+import dotenv from "dotenv";
+dotenv.config();
 
+//db and authenticate user
+import connectDB from "./db/connect.js";
 
-const app = express()
+//routers
+import authRouter from './routes/authRoutes.js'
+import jobsRouter from './routes/jobRoutes.js'
+
 //middleware
+import notFoundMiddle from "./middleware/not-found.js";
+import errorHandlerMiddleWare from "./middleware/error-handler.js";
 
-import notFoundMiddle from './middleware/not-found.js'
+app.use(express.json())
 
 app.get("/", (req, res) => {
-    res.send("Welcome!")
-})
+  res.send("Welcome!");
+});
 
-app.use(notFoundMiddle)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/jobs', jobsRouter)
 
-const port = process.env.PORT || 3003
-app.listen(port, () => {
-    console.log(`Server is listening on port number: ${port}`)
-})
+app.use(notFoundMiddle);
+app.use(errorHandlerMiddleWare);
+
+
+
+const port = process.env.PORT || 3003;
+
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URL);
+    app.listen(port, () => {
+      console.log(`Server is listening on port number: ${port}`);
+    });
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+start()

@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/clifton311/jobify#readme",
   "dependencies": {
-    "express": "^4.18.0"
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "mongoose": "^6.3.1",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
